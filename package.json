@@ -1,6 +1,8 @@
 {
   "name": "ninja-smoothies",
   "version": "0.1.0",
+  "description": "Smoothies for Ninja",
+  "author": "Sulthon Abdul Malik <sulthon.almalik@gmail.com>",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
