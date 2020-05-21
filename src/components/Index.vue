@@ -26,27 +26,20 @@ export default {
   },
   data() {
     return {
-      smoothies: [
-        {
-          title: "Ninja Brew",
-          slug: "ninja-brew",
-          ingredients: ["banana", "coffee", "milk"],
-          id: "1",
-        },
-        {
-          title: "Morning Mood",
-          slug: "morning-mood",
-          ingredients: ["mango", "lime", "juice"],
-          id: "2",
-        },
-      ],
+      smoothies: [],
     };
   },
   methods: {
     deleteSmoothie(id) {
-      this.smoothies = this.smoothies.filter((smoothie) => {
-        return smoothie.id !== id;
-      });
+      const smoothie = db.collection("smoothies");
+      smoothie
+        .doc(id)
+        .delete()
+        .then(() => {
+          this.smoothies = this.smoothies.filter((smoothie) => {
+            return smoothie.id !== id;
+          });
+        });
     },
   },
   created() {
