@@ -28,6 +28,15 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/AddSmoothie.vue"),
   },
+  {
+    path: "/edit-smoothie/:smoothie_slug",
+    name: "EditSmoothie",
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(/* webpackChunkName: "about" */ "../views/EditSmoothie.vue"),
+  },
 ];
 
 const router = new VueRouter({
