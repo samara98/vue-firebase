@@ -18,8 +18,11 @@ export default new Router({
 				import(/* webpackChunkName: "chat" */ "../components/Chat.vue"),
 			props: true,
 			beforeEnter: (to, from, next) => {
-				console.log(to.params.name);
-				next();
+				if (to.params.name) {
+					next();
+				}else {
+					next({name: "Welcome"})
+				}
 			}
 		}
 	]
