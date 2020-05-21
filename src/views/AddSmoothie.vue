@@ -56,8 +56,8 @@ export default {
           remove: /[$*_+~.()'"!\-:@\\]/g,
           lower: true,
         });
-        const smoothie = db.collection("smoothies");
-        smoothie
+        const smoothies = db.collection("smoothies");
+        smoothies
           .add({
             title: this.title,
             ingredients: this.ingredients,
