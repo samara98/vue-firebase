@@ -3,16 +3,23 @@
     <h2 class="center-align indigo-text">Add New Smoothie Recipe</h2>
     <form action="POST" @submit.prevent="AddSmoothie">
       <div class="field title">
-        <label for="" class="title">Smoothie Title:</label>
-        <input type="text" name="title" v-model="title" />
+        <label for="title" class="title">Smoothie Title:</label>
+        <input id="title" type="text" name="title" v-model.trim="title" />
+      </div>
+      <div v-for="(ing, index) in ingredients" :key="index">
+        <label for="">ingredient</label>
+        <input type="text" name="ingredient" v-model="ingredients[index]" />
       </div>
       <div class="field add-ingredient">
-        <label for="" class="add-ingredient">Add an ingredient:</label>
+        <label for="add-ingredient" class="add-ingredient"
+          >Add an ingredient:</label
+        >
         <input
+          id="add-ingredient"
           type="text"
           name="add-ingredient"
           @keydown.tab="addIng"
-          v-model="another"
+          v-model.trim="another"
         />
       </div>
       <div class="field center-align">
