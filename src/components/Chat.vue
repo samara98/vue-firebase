@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import moment from "moment";
+
 import NewMessage from "./NewMessage";
 import db from "../api/firebase";
 
@@ -40,9 +42,15 @@ export default {
 			querySnapshot.docChanges().forEach(change => {
 				if (change.type === "added") {
 					const { doc } = change;
+					const data = doc.data();
 					this.messages.push({
 						id: doc.id,
-						...doc.data()
+						name: data.name,
+						content: data.content,
+						timestamp: moment(
+							data.timestamp.seconds * 1000 +
+								data.timestamp.nanoseconds / 1000000
+						).format("lll")
 					});
 				}
 			});
@@ -63,6 +71,6 @@ export default {
 
 .chat .time {
 	display: block;
-	font-size: 1.2em;
+	font-size: 0.8em;
 }
 </style>
