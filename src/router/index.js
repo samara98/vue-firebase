@@ -5,7 +5,6 @@ import Welcome from "@/components/Welcome";
 Vue.use(Router);
 
 export default new Router({
-	mode: "history",
 	routes: [
 		{
 			path: "/",
@@ -17,7 +16,11 @@ export default new Router({
 			name: "Chat",
 			component: () =>
 				import(/* webpackChunkName: "chat" */ "../components/Chat.vue"),
-			props: true
+			props: true,
+			beforeEnter: (to, from, next) => {
+				console.log(to.params.name);
+				next();
+			}
 		}
 	]
 });
