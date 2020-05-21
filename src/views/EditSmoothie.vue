@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import slugify from "slugify";
 import db from "../firebase/init";
 
 export default {
@@ -58,8 +59,27 @@ export default {
   },
   methods: {
     EditSmoothie() {
-      console.log(this.smoothie.title);
-      console.log(this.smoothie.ingredients);
+      if (this.smoothie.title) {
+        this.feedback = null;
+        // create a slug
+        this.smoothie.slug = slugify(this.smoothie.title, {
+          replacement: "-",
+          remove: /[$*_+~.()'"!\-:@\\]/g,
+          lower: true,
+        });
+        const smoothies = db.collection("smoothies");
+        smoothies
+          .doc(this.smoothie.id)
+          .update(this.smoothie)
+          .then(() => {
+            this.$router.push({ name: "Home" });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      } else {
+        this.feedback = "You must enter a smoothie title";
+      }
     },
     addIng() {
       if (this.another) {

@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import db from "../firebase/init";
 import slugify from "slugify";
+import db from "../firebase/init";
 
 export default {
   name: "AddSmoothie",
