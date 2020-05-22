@@ -5,9 +5,6 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-
 export default {
 	name: "GMap",
 	data() {
@@ -18,8 +15,8 @@ export default {
 	},
 	methods: {
 		renderMap() {
-			const map = new window.google.maps.Map(document.getElementById("map"), {
-				center: { lat: 53, lng: -2 },
+			new window.google.maps.Map(document.getElementById("map"), {
+				center: { lat: this.lat, lng: this.lng },
 				zoom: 6,
 				maxZoom: 15,
 				minZoom: 3,
