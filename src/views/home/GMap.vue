@@ -13,19 +13,31 @@ export default {
 			lng: -2
 		};
 	},
+	computed: {
+		google() {
+			return window.google;
+		}
+	},
 	methods: {
 		renderMap() {
-			new window.google.maps.Map(document.getElementById("map"), {
-				center: { lat: this.lat, lng: this.lng },
-				zoom: 6,
-				maxZoom: 15,
-				minZoom: 3,
-				streetViewControl: false
-			});
+			if (this.google) {
+				new this.google.maps.Map(document.getElementById("map"), {
+					center: { lat: this.lat, lng: this.lng },
+					zoom: 6,
+					maxZoom: 15,
+					minZoom: 3,
+					streetViewControl: false
+				});
+			}
 		}
 	},
 	mounted() {
 		this.renderMap();
+	},
+	watch: {
+		google() {
+			this.renderMap();
+		}
 	}
 };
 </script>
