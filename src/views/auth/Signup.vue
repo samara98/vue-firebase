@@ -52,24 +52,31 @@ export default {
 					remove: /[$*_+~.()'"!\-\\:@]g/,
 					lower: true
 				});
-				const dbUsers = db.collection("users-geo-ninjas");
-				dbUsers
-					.doc(this.slug)
-					.get()
-					.then(doc => {
-						if (doc.exists) {
-							this.feedback = "This alias already exists";
-						} else {
-							firebase
-								.auth()
-								.createUserWithEmailAndPassword(this.email, this.password)
-								.catch(err => {
-									console.error(err);
-									this.feedback = err.message;
+				const dbUsers = db.collection("users-geo-ninjas").doc(this.slug);
+				dbUsers.get().then(doc => {
+					if (doc.exists) {
+						this.feedback = "This alias already exists";
+					} else {
+						firebase
+							.auth()
+							.createUserWithEmailAndPassword(this.email, this.password)
+							.then(cred => {
+								dbUsers.set({
+									alias: this.alias,
+									geolocation: null,
+									user_id: cred.user.uid
 								});
-							this.feedback = "This alias is free to use";
-						}
-					});
+							})
+							.then(() => {
+								this.$router.push({ name: "Home" });
+							})
+							.catch(err => {
+								console.error(err);
+								this.feedback = err.message;
+							});
+						this.feedback = "This alias is free to use";
+					}
+				});
 			} else {
 				this.feedback = "You must enter an alias";
 			}
