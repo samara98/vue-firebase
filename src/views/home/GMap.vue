@@ -5,6 +5,10 @@
 </template>
 
 <script>
+import "../../api/firebase-init";
+import firebase from "firebase/app";
+import "firebase/auth";
+
 export default {
 	name: "GMap",
 	data() {
@@ -33,6 +37,7 @@ export default {
 	},
 	mounted() {
 		this.renderMap();
+		console.log(firebase.auth().currentUser);
 	},
 	watch: {
 		google() {
