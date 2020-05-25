@@ -6,7 +6,7 @@
 
 <script>
 import "../../api/firebase-init";
-import firebase from "firebase/app";
+// import firebase from "firebase/app";
 import "firebase/auth";
 
 export default {
@@ -36,8 +36,25 @@ export default {
 		}
 	},
 	mounted() {
+		// get user geolocation
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				position => {
+					this.lat = position.coords.latitude;
+					this.lng = position.coords.longitude;
+					this.renderMap();
+				},
+				err => {
+					console.error(err);
+					this.renderMap();
+				},
+				{ maximumAge: 6000, timeout: 3000 }
+			);
+		} else {
+			// position centre of default values
+			this.renderMap();
+		}
 		this.renderMap();
-		console.log(firebase.auth().currentUser);
 	},
 	watch: {
 		google() {
