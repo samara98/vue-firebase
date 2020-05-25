@@ -25,13 +25,33 @@ export default {
 	methods: {
 		renderMap() {
 			if (this.google) {
-				new this.google.maps.Map(document.getElementById("map"), {
+				const map = new this.google.maps.Map(document.getElementById("map"), {
 					center: { lat: this.lat, lng: this.lng },
 					zoom: 6,
 					maxZoom: 15,
 					minZoom: 3,
 					streetViewControl: false
 				});
+				db.collection("users-geo-ninjas")
+					.get()
+					.then(snapshot => {
+						snapshot.docs.forEach(doc => {
+							const data = doc.data();
+							if (data.geolocation) {
+								const marker = new window.google.maps.Marker({
+									position: {
+										lat: data.geolocation.lat,
+										lng: data.geolocation.lng
+									},
+									map
+								});
+								// add click event to marker
+								marker.addListener("click", () => {
+									console.log(doc.id);
+								});
+							}
+						});
+					});
 			}
 		}
 	},
