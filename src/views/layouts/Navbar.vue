@@ -6,9 +6,16 @@
 					>Geo Ninjas</router-link
 				>
 				<ul class="right">
-					<li><router-link :to="{ name: `Signup` }">Signup</router-link></li>
-					<li><router-link :to="{ name: `Login` }">Login</router-link></li>
-					<li><a href="#" @click="logout">Logout</a></li>
+					<template v-if="!user">
+						<li><router-link :to="{ name: `Signup` }">Signup</router-link></li>
+						<li><router-link :to="{ name: `Login` }">Login</router-link></li>
+					</template>
+					<template v-if="user">
+						<li>
+							<a href="#">{{ user.email }} </a>
+						</li>
+						<li><a href="#" @click="logout">Logout</a></li>
+					</template>
 				</ul>
 			</div>
 		</nav>
@@ -21,7 +28,9 @@ import firebase from "firebase/app";
 export default {
 	name: "Navbar",
 	data() {
-		return {};
+		return {
+			user: null
+		};
 	},
 	methods: {
 		logout() {
@@ -32,6 +41,16 @@ export default {
 					this.$router.push({ name: "Login" });
 				});
 		}
+	},
+	created() {
+		// const user = firebase.auth().currentUser;
+		firebase.auth().onAuthStateChanged(user => {
+			if (user) {
+				this.user = user;
+			} else {
+				this.user = null;
+			}
+		});
 	}
 };
 </script>
