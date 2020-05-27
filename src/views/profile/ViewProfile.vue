@@ -3,7 +3,10 @@
 		<div class="card" v-if="profile">
 			<h2 class="deep-purple-text center">{{ profile.alias }}'s Wall</h2>
 			<ul class="comments collection">
-				<li>Comments</li>
+				<li v-for="(comment, index) in comments" :key="index">
+					<div class="deep-purple-text">{{ comment.from }}</div>
+					<div class="grey-text text-darken-2">{{ comment.content }}</div>
+				</li>
 			</ul>
 			<form @submit.prevent="addComment">
 				<div class="field">
@@ -32,7 +35,8 @@ export default {
 			profile: null,
 			newComment: null,
 			feedback: null,
-			user: null
+			user: null,
+			comments: []
 		};
 	},
 	methods: {
@@ -42,7 +46,7 @@ export default {
 				db.collection("comments-geo-ninjas")
 					.add({
 						to: this.$route.params.id,
-						from: this.user.id,
+						from: this.user.alias,
 						content: this.newComment,
 						time: Date.now()
 					})
@@ -70,11 +74,27 @@ export default {
 				});
 			});
 
+		// profile data
 		dbUsers
 			.doc(this.$route.params.id)
 			.get()
 			.then(snapshot => {
 				this.profile = snapshot.data();
+			});
+
+		// comments
+		const dbComments = db.collection("comments-geo-ninjas");
+		dbComments
+			.where("to", "==", this.$route.params.id)
+			.onSnapshot(querySnapshop => {
+				querySnapshop.docChanges().forEach(change => {
+					if (change.type === "added") {
+						this.comments.unshift({
+							from: change.doc.data().from,
+							content: change.doc.data().content
+						});
+					}
+				});
 			});
 	}
 };
