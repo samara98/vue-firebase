@@ -32,6 +32,7 @@ import slugify from "slugify";
 import db from "../../api/firebase-init";
 import firebase from "firebase/app";
 import "firebase/auth";
+import "firebase/functions";
 
 export default {
 	name: "Signup",
@@ -52,15 +53,18 @@ export default {
 					remove: /[$*_+~.()'"!\-\\:@]g/,
 					lower: true
 				});
-				const dbUsers = db.collection("users-geo-ninjas").doc(this.slug);
-				dbUsers.get().then(doc => {
-					if (doc.exists) {
+				const checkAlias = firebase.functions().httpsCallable("checkAlias");
+				checkAlias({ slug: this.slug }).then(result => {
+					if (!result.data.unique) {
 						this.feedback = "This alias already exists";
 					} else {
 						firebase
 							.auth()
 							.createUserWithEmailAndPassword(this.email, this.password)
 							.then(cred => {
+								const dbUsers = db
+									.collection("users-geo-ninjas")
+									.doc(this.slug);
 								dbUsers.set({
 									alias: this.alias,
 									geolocation: null,
