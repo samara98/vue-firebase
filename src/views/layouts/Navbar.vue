@@ -12,7 +12,7 @@
 					</template>
 					<template v-if="user">
 						<li>
-							<a href="#">{{ user.email }} </a>
+							<a>{{ user.email }} </a>
 						</li>
 						<li><a href="#" @click="logout">Logout</a></li>
 					</template>
